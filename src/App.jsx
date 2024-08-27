@@ -66,7 +66,7 @@ function App() {
         </Suspense>
         {/* <Room /> */}
         <axesHelper args={[10]} />  
-        {/* <Environment preset='sunset' /> */}
+        <Environment preset='night' />
       </Canvas>
     </>
   )

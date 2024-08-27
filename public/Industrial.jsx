@@ -7,13 +7,34 @@ Source: https://sketchfab.com/3d-models/vr-industrial-art-gallery-digital-media-
 Title: VR Industrial Art Gallery & Digital Media
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { useSpring, a } from "@react-spring/three"
 
-export default function Model() {
+export default function Model(props) {
   const { nodes, materials } = useGLTF('/industrial.gltf')
+  const [currentPosition, setCurrentPosition] = useState(false);
+
+  // { rojo , verde, azul}
+  const positionInitial = [0, -1.2, -1.33]
+  const rotationInitial = [.33 , -Math.PI / -1.1, 0]
+  const scaleInitial = .5;
+
+  const handleClickInsta = () => {
+    console.log(`Insta ${currentPosition}!`);
+    setCurrentPosition(!currentPosition)
+  }
+  const animarRoom = useSpring({
+    rotation: currentPosition ? [0, -Math.PI / -1, 0] : rotationInitial,
+    position: currentPosition ? [1.7, -1.5, -3.5] : positionInitial,
+    scale: currentPosition ? .8 : scaleInitial,
+  })
+  // instagram
+  // const positionInitial = [1, -1.2, .25]
+  // const rotationInitial = [0, -Math.PI / -1, 0]
+
   return (
-    <group dispose={null}>
+    <a.group {...props} dispose={null} rotation={animarRoom.rotation}  position={animarRoom.position} scale={animarRoom.scale}>
       <group position={[0.01, 9.159, -12.201]} rotation={[0.289, 0, 0]} scale={0.065}>
         <mesh geometry={nodes.Object_10.geometry} material={materials.Light} />
         <mesh geometry={nodes.Object_11.geometry} material={materials.BlackMetal} />
@@ -611,7 +632,13 @@ export default function Model() {
       <mesh geometry={nodes.Object_599.geometry} material={materials.Light} position={[14.581, 4.134, 3.95]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.192} />
       <mesh geometry={nodes.Object_601.geometry} material={materials.Light} position={[14.58, 5.269, -13.658]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.368} />
       <mesh geometry={nodes.Object_603.geometry} material={materials.Light} position={[14.58, 5.269, 3.574]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.368} />
-    </group>
+      
+      {/* { rojo , verde, azul} */}
+      <mesh position={[2.2, 2.15, -6]}  scale={2.6} onClick={handleClickInsta}>
+          <boxGeometry attach="geometry" args={[.5, .5, .5]}  />
+          <meshStandardMaterial attach="material" color={'#ff00ff'} transparent={true} opacity={.3} />
+      </mesh>
+    </a.group>
   )
 }
 
