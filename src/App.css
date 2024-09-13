@@ -1,9 +1,10 @@
 body{
   background-color: #222;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 canvas {
-  height: 100vh !important;
+  height: 100dvh !important;
 }
 
 .container {

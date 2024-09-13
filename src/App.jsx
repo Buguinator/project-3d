@@ -1,22 +1,18 @@
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useState } from 'react'
 import './App.css'
 
 import { Canvas } from '@react-three/fiber'
-import { Environment, OrbitControls, Stars } from '@react-three/drei'
+import { Environment, OrbitControls, Stars, Html } from '@react-three/drei'
+
 import { PerspectiveCamera, SpotLight } from 'three'
-import { useSpring, a } from "@react-spring/three"
-
 // Modelos
-// import Island from '../public/Island'
-import Gym from '../public/Gym'
 import Industrial from '../public/Industrial'
-
-
+import Loading from './components/Loading'
 
 const Lights = () => {
   return(
     <>
-    <ambientLight intensity={0.8} />
+    <ambientLight intensity={2} />
     <directionalLight
       castShadow
       position={[-8, 16, -8]}
@@ -44,6 +40,15 @@ const CameraHelper = () => {
   </group>;
 }
 
+// function Loading() {
+//   return (
+//   <Html>
+//     <h2>🌀 Loading...</h2>
+//   </Html>
+//   )
+// }
+
+
 function App() {
   const [camEnabled, setCamEnabled] = useState(false)
 
@@ -51,7 +56,7 @@ function App() {
     <>  
       {/* <Canvas camera={{ position:[90, 20, 120], fov:45 }}> */}
       <Canvas>
-        <OrbitControls /> 
+        {/* <OrbitControls />  */}
         <Lights />
         {/* <Stars /> */}
         {/* <Cubito 
@@ -61,11 +66,11 @@ function App() {
           camEnabled={camEnabled} 
           setCamEnabled={setCamEnabled} 
           /> */}
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loading/>}>
           <Industrial />
         </Suspense>
         {/* <Room /> */}
-        <axesHelper args={[10]} />  
+        {/* <axesHelper args={[10]} />   */}
         <Environment preset='night' />
       </Canvas>
     </>

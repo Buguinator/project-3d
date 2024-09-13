@@ -7,32 +7,87 @@ Source: https://sketchfab.com/3d-models/vr-industrial-art-gallery-digital-media-
 Title: VR Industrial Art Gallery & Digital Media
 */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useSpring, a } from "@react-spring/three"
+import useScreenSize from "../src/hooks/useScreenSize"
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('/industrial.gltf')
-  const [currentPosition, setCurrentPosition] = useState(false);
+  const { width, height } = useScreenSize();
 
+  const [hovered, setHover] = useState(false)
+  const [cubeNumber, setCubeNumber] = useState(0)
+  let animarRoom = {}
   // { rojo , verde, azul}
   const positionInitial = [0, -1.2, -1.33]
-  const rotationInitial = [.33 , -Math.PI / -1.1, 0]
+  const rotationInitial = [.33 , -Math.PI / -1.11, 0]
   const scaleInitial = .5;
 
-  const handleClickInsta = () => {
-    console.log(`Insta ${currentPosition}!`);
-    setCurrentPosition(!currentPosition)
-  }
-  const animarRoom = useSpring({
-    rotation: currentPosition ? [0, -Math.PI / -1, 0] : rotationInitial,
-    position: currentPosition ? [1.7, -1.5, -3.5] : positionInitial,
-    scale: currentPosition ? .8 : scaleInitial,
-  })
-  // instagram
-  // const positionInitial = [1, -1.2, .25]
-  // const rotationInitial = [0, -Math.PI / -1, 0]
+  console.log(`width: ${width}, height: ${height}`);
 
+  if(cubeNumber == 0){
+    animarRoom = useSpring({
+      position: width < 700 ? [3.2, -1.2, -1.33] : positionInitial,
+      rotation:  width < 700 ? [.25 , -Math.PI / -1.7, 0] : rotationInitial,
+      scale: width < 700 ? .6 : scaleInitial,
+    })
+  }
+
+  if(cubeNumber == 1){
+    animarRoom = useSpring({
+      position: [1.7, -1.5, -3.5],
+      rotation: width < 700 ? [.33, -Math.PI / -.99, 0] : [0, -Math.PI / -1, 0],
+      scale: width < 700 ? .75 : .8,
+    })
+  }
+
+  {/* { rojo , verde, azul} */}
+  if(cubeNumber == 2){
+    animarRoom = useSpring({
+      position: width < 700 ? [-1.5, -2, 1.5] : [3, -1.5, 1.5],
+      rotation: width < 700 ? [0, -Math.PI / -.55, 0] : [.4, -Math.PI / -.5, 0],
+      scale: width < 700 ? .45 : .8,
+    })
+  }
+
+  if(cubeNumber == 3){
+    animarRoom = useSpring({
+      position: width < 700 ? [0, -2.5, 2.2] : [-2, -2, 2.2],
+      rotation: width < 700 ? [.6, -Math.PI / -.59 , 0] : [.5, -Math.PI / -.65 , 0],
+      scale: width < 700 ? .65 : .8,
+    })
+  }
+
+  // if(cubeNumber == 4){
+  //   animarRoom = useSpring({
+  //     position: [0, -1.2, -1.33],
+  //     rotation: [.33 , -Math.PI / -1.11, 0],
+  //     scale: .5,
+  //   })
+  // }
+
+  const handleClickCube1 = () => {
+    // setCurrentPosition(!currentPosition)
+    setCubeNumber(1)
+    console.log(cubeNumber)
+  }
+
+  const handleClickCube2 = () => {
+    setCubeNumber(2)
+    console.log(cubeNumber)
+  }
+
+  const handleClickCube3 = () => {
+    setCubeNumber(3)
+    console.log(cubeNumber)
+  }
+
+  const handleClickCube4 = () => {
+    setCubeNumber(0)
+    console.log(cubeNumber)
+  }
+  
   return (
     <a.group {...props} dispose={null} rotation={animarRoom.rotation}  position={animarRoom.position} scale={animarRoom.scale}>
       <group position={[0.01, 9.159, -12.201]} rotation={[0.289, 0, 0]} scale={0.065}>
@@ -632,11 +687,46 @@ export default function Model(props) {
       <mesh geometry={nodes.Object_599.geometry} material={materials.Light} position={[14.581, 4.134, 3.95]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.192} />
       <mesh geometry={nodes.Object_601.geometry} material={materials.Light} position={[14.58, 5.269, -13.658]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.368} />
       <mesh geometry={nodes.Object_603.geometry} material={materials.Light} position={[14.58, 5.269, 3.574]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.368} />
-      
       {/* { rojo , verde, azul} */}
-      <mesh position={[2.2, 2.15, -6]}  scale={2.6} onClick={handleClickInsta}>
+      
+      <mesh 
+        position= {[2.2, 2.15, -6]}
+        scale={2.6} 
+        onClick={handleClickCube1} 
+        onPointerOver={(event) => setHover(true)}
+        onPointerOut={(event) => setHover(false)}>
           <boxGeometry attach="geometry" args={[.5, .5, .5]}  />
-          <meshStandardMaterial attach="material" color={'#ff00ff'} transparent={true} opacity={.3} />
+          <meshStandardMaterial attach="material" color={hovered ? '#af0000' : '#00a6ff'} transparent={true} opacity={.5} />
+      </mesh>
+
+      <mesh 
+        position={[10, 5, -6]}
+        scale={2.6} 
+        onClick={handleClickCube2} 
+        onPointerOver={(event) => setHover(true)}
+        onPointerOut={(event) => setHover(false)}>
+          <boxGeometry attach="geometry" args={[.5, .5, .5]}  />
+          <meshStandardMaterial attach="material" color={hovered ? '#af0000' : '#00a6ff'} transparent={true} opacity={.5} />
+      </mesh>
+
+      <mesh 
+        position={width < 700 ? [0, 4, -3]: [3, 4, -3] }
+        scale={2.6} 
+        onClick={handleClickCube3} 
+        onPointerOver={(event) => setHover(true)}
+        onPointerOut={(event) => setHover(false)}>
+          <boxGeometry attach="geometry" args={[.5, .5, .5]}  />
+          <meshStandardMaterial attach="material" color={hovered ? '#af0000' : '#00a6ff'} transparent={true} opacity={.5} />
+      </mesh>
+
+      <mesh 
+        position={[-10, 4, -3]}
+        scale={2.6} 
+        onClick={handleClickCube4} 
+        onPointerOver={(event) => setHover(true)}
+        onPointerOut={(event) => setHover(false)}>
+          <boxGeometry attach="geometry" args={[.5, .5, .5]}  />
+          <meshStandardMaterial attach="material" color={hovered ? '#af0000' : '#00d8ff'} transparent={true} opacity={.5} />
       </mesh>
     </a.group>
   )
